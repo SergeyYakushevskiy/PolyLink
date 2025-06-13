@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import java.net.URL?>
+<?import javafx.scene.text.TextFlow?>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="dstu.csae.controller.MainController">
+    <top>
+        <HBox>
+            <padding>
+                <Insets right="5"/>
+            </padding>
+            <MenuBar>
+                <Menu text="Окно">
+                    <MenuItem fx:id="settingsMenuItem" text="Настройки" onAction="#onSettings"/>
+                    <SeparatorMenuItem/>
+                    <MenuItem fx:id="exitMenuItem" text="Выход" onAction="#onExit"/>
+                </Menu>
+                <Menu text="Помощь">
+                    <MenuItem fx:id="aboutMenuItem" text="О программе"/>
+                </Menu>
+            </MenuBar>
+            <ComboBox fx:id="modeComboBox" promptText="Выберите режим" />
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="codeLabel" text="РС код: "/>
+        </HBox>
+    </top>
+
+    <center>
+        <GridPane GridPane.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+            <rowConstraints>
+                <RowConstraints percentHeight="100" vgrow="ALWAYS"/>
+            </rowConstraints>
+
+            <columnConstraints>
+                <ColumnConstraints percentWidth="33.3" hgrow="ALWAYS"/>
+                <ColumnConstraints percentWidth="33.3" hgrow="ALWAYS"/>
+                <ColumnConstraints percentWidth="33.3" hgrow="ALWAYS"/>
+            </columnConstraints>
+
+            <VBox spacing="5" GridPane.columnIndex="0" VBox.vgrow="ALWAYS">
+                <Label fx:id="inputAreaLabel" text="Передатчик"/>
+                <TextArea fx:id="inputArea" VBox.vgrow="ALWAYS"/>
+            </VBox>
+
+            <VBox spacing="5" GridPane.columnIndex="1" VBox.vgrow="ALWAYS">
+                <Label fx:id="polynomialAreaLabel" text="Полиномиальный вид"/>
+                <ScrollPane fitToWidth="true" fitToHeight="true" VBox.vgrow="ALWAYS">
+                    <TextFlow fx:id="polynomialFlow"/>
+                </ScrollPane>
+            </VBox>
+
+            <VBox spacing="5" GridPane.columnIndex="2" VBox.vgrow="ALWAYS">
+                <Label fx:id="outputAreaLabel" text="Приёмник"/>
+                <TextArea fx:id="outputArea" editable="false" VBox.vgrow="ALWAYS" />
+            </VBox>
+        </GridPane>
+    </center>
+
+
+    <bottom>
+        <HBox spacing="10">
+            <padding>
+                <Insets left="10" right="10" top="5" bottom="5"/>
+            </padding>
+            <Label fx:id="modeLabel" text="Режим работы: " alignment="BASELINE_CENTER"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button fx:id="operateButton" text="Обработать" onAction="#onOperate"/>
+        </HBox>
+    </bottom>
+</BorderPane>

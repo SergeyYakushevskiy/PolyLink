@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Appenders>
+        <File name="MainLoggerFile" fileName="logs/app.log" append="false">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger - %msg%n%throwable{full}"/>
+        </File>
+        <File name="SettingsLoggerFile" fileName="logs/settings.log" append="false">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} [%t] %-5level %logger{36} - %msg%n"/>
+        </File>
+        <File name="CodecLoggerFile" fileName="logs/codec.log" append="false">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} [%t] %-5level %logger{36} - %msg%n"/>
+        </File>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss} [%t] %-5level %logger - %msg%n"/>
+        </Console>
+    </Appenders>
+
+    <Loggers>
+        <Logger name="dstu.csae.gui.MainWindow" level="debug" additivity="false">
+            <AppenderRef ref="MainLoggerFile"/>
+        </Logger>
+        <Logger name="dstu.csae.controller.MainController" level="debug" additivity="false">
+            <AppenderRef ref="MainLoggerFile"/>
+        </Logger>
+
+        <Logger name="dstu.csae.config.Config" level="debug" additivity="false">
+            <AppenderRef ref="SettingsLoggerFile"/>
+        </Logger>
+        <Logger name="dstu.csae.config.Settings" level="debug" additivity="false">
+            <AppenderRef ref="SettingsLoggerFile"/>
+        </Logger>
+        <Logger name="dstu.csae.gui.SettingsWindow" level="debug" additivity="false">
+            <AppenderRef ref="SettingsLoggerFile"/>
+        </Logger>
+        <Logger name="dstu.csae.controller.SettingsController" level="debug" additivity="false">
+            <AppenderRef ref="SettingsLoggerFile"/>
+        </Logger>
+
+        <Logger name="dstu.csae.galois.GaloisFieldLogger" level="debug" additivity="false">
+            <AppenderRef ref="CodecLoggerFile"/>
+        </Logger>
+
+        <Logger name="dstu.csae.codec.TextConverter" level="debug" additivity="false">
+            <AppenderRef ref="CodecLoggerFile"/>
+        </Logger>
+
+        <Root level="info">
+            <AppenderRef ref="Console"/>
+        </Root>
+    </Loggers>
+</Configuration>

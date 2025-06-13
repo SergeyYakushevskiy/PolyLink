@@ -1,0 +1,19 @@
+.bordered-pane {
+    -fx-border-color: gray;
+    -fx-border-width: 1;
+    -fx-border-radius: 5;
+    -fx-padding: 10;
+}
+.char-wrap-textarea .content {
+    -fx-wrap-text: true;
+    -fx-text-alignment: left;
+    -fx-font-family: monospace; /* по желанию */
+    -fx-padding: 5px;
+}
+
+/* Принудительно включаем посимвольный перенос */
+.char-wrap-textarea .text {
+    -fx-word-break: break-all; /* Неофициальное свойство, работает в некоторых реализациях */
+}
+
+

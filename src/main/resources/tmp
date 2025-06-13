@@ -1,0 +1,79 @@
+public ArrayList<FieldPolynomial> textToPolynomial(String text, int polynomialSize)
+        throws IllegalStateException{
+        if(code == null){
+            throw new IllegalStateException("Код Рида-Соломона не задан");
+        }
+
+        ArrayList<FieldPolynomial> polynomials = new ArrayList<>();
+        ArrayList<Integer> elements = new ArrayList<>();
+
+        byte[] bytes;
+        try{
+            bytes = Base64.getDecoder().decode(text);
+        }catch (IllegalArgumentException ex){
+            bytes = text.getBytes(StandardCharsets.UTF_8);
+        }
+//        System.out.println("Из текста:    " + Arrays.toString(bytes));
+        BigInteger big = new BigInteger(1, bytes);
+
+        GaloisFieldExtension field = code.getField();
+        BigInteger fieldSize = BigInteger.valueOf(field.getCharacteristic());
+
+        while (big.compareTo(BigInteger.ONE) >= 0){
+            BigInteger[] divRem = big.divideAndRemainder(fieldSize);
+            elements.add(divRem[1].intValue());
+            big = divRem[0];
+        }
+
+        for(int i = 0; i < elements.size(); i += polynomialSize){
+            int[] coefficients = elements.subList(i, Math.min(elements.size(), i + polynomialSize))
+                    .stream()
+                    .mapToInt(Integer::intValue)
+                    .toArray();
+            FieldPolynomial polynomial = new FieldPolynomial(field, coefficients);
+            polynomials.add(polynomial);
+        }
+
+        return polynomials;
+    }
+
+    public String polynomialToText(ArrayList<FieldPolynomial> polynomials, int polynomialSize)
+            throws IllegalStateException{
+        if(code == null){
+            throw new IllegalStateException("Код Рида-Соломона не задан");
+        }
+
+        GaloisFieldExtension field = code.getField();
+        BigInteger fieldSize = BigInteger.valueOf(field.getCharacteristic());
+
+        BigInteger big = BigInteger.ZERO;
+        List<Integer> elements = new ArrayList<>(polynomials.stream()
+                .peek(x -> x.removeLastZero())
+                .map(FieldPolynomial::getCoefficients)
+                .map(x -> {
+                    int[] tmp = new int[polynomialSize];
+                    System.arraycopy(x, 0, tmp, 0, x.length);
+                    return tmp;
+                })
+                .flatMapToInt(Arrays::stream)
+                .boxed()
+                .toList());
+        Collections.reverse(elements);
+        for (Integer element : elements) {
+            big = big.multiply(fieldSize).add(BigInteger.valueOf(element));
+        }
+
+        byte[] bytes = big.toByteArray();
+//        System.out.println("Из полиномов: " + Arrays.toString(bytes));
+        // BigInteger может добавить ведущий нулевой байт, если старший бит установлен
+        if (bytes.length > 1 && bytes[0] == 0) {
+            byte[] tmp = new byte[bytes.length - 1];
+            System.arraycopy(bytes, 1, tmp, 0, tmp.length);
+            bytes = tmp;
+        }
+        try{
+            return Base64.getEncoder().encodeToString(bytes);
+        }catch (IllegalArgumentException ex) {
+            return new String(bytes, StandardCharsets.UTF_8);
+        }
+    }
